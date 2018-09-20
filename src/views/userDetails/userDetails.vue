@@ -2,32 +2,43 @@
     html, body, #app {
         height: 100%;
         min-width: 800px;
+        margin-top: 6%;
+        margin-left: -3%;
         overflow: hidden;
         .adduser {
             position: absolute;
-            top: 100px;
-            left: 50%;
+            top: 125px;
+            left: 35%;
             transform: translate(-50%, 0);
             display: flex;
             flex-direction: row;
-            .user, .password, .phone, .role, .add {
-                margin-left: 20px;
+            .user, .password, .phone, .role{
                 text-align: center;
                 font-size: 16px;
             }
+            .add{
+                margin-left:20px;
+                margin-top:-5px;
+            }
+        }
+
+        .txt{
+            width: 40px;
+            text-align: center;
+            line-height: 34px;
         }
         h1 {
             position: absolute;
-            left: 120px;
+            left: 3%;
             top: 60px;
         }
         #table {
-            margin-left: 200px;
-            margin-top: 120px;
+            margin-left: 0;
+            margin-top: 0;
             width: 1200px;
         }
         .ivu-page {
-            margin-left: 200px;
+            margin-left: 0.5%;
         }
     }
 </style>
@@ -35,10 +46,20 @@
     <div id="app">
         <h1>用户流水表</h1>
         <div class="adduser">
-            <div class="user">用户名&nbsp;&nbsp; <Input v-model="user" placeholder="" style="width: 200px"/></div>
-            <div class="password">密码&nbsp;&nbsp; <Input v-model="password" placeholder="" style="width: 200px"/></div>
-            <div class="phone">手机号&nbsp;&nbsp; <Input v-model="phone" placeholder="" style="width: 200px"/></div>
-            <div class="role">角色&nbsp;&nbsp;
+            <span class="txt">用户名</span>
+            <div class="user">
+                <Input v-model="user" placeholder="" style="width: 200px"/>
+            </div>
+            <span class="txt">密码</span>
+            <div class="password">
+                <Input v-model="password" placeholder="" style="width: 200px"/>
+            </div>
+            <span class="txt">手机号</span>
+            <div class="phone">
+                <Input v-model="phone" placeholder="" style="width: 200px"/>
+            </div>
+            <span class="txt">角色</span>
+            <div class="role">
                 <Select v-model="role" style="width:200px" name="public-choice"
                         id="selected">
                     <Option v-for="item in rolename" :value="item.roleid" :key="item.value">{{item.rolename}}</Option>

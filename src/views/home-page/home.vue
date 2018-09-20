@@ -250,6 +250,12 @@
                 todayCount: '',
                 userName: '',
                 roleName: '',
+<<<<<<< .mine
+||||||| .r854
+                errorimg: this.src +
+=======
+                //errorimg: this.src +
+>>>>>>> .r877
             };
         },
         created() {

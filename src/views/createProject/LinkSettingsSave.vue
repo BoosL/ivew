@@ -34,7 +34,7 @@
             .luodiname {
                 position: absolute;
                 top: 120px;
-                left: 18%;
+                left: 22%;
                 width: 200px;
                 height: 30px;
                 border: 1px solid #666;
@@ -196,7 +196,7 @@
                            placeholder="请输入所需要的内容"/>
                 </div>
                 <div class="button">
-                    <Button type="primary" style="margin-left: 20px;" @click="CtrlShift">另存为</Button>
+                    <!--<Button type="primary" style="margin-left: 20px;" @click="CtrlShift">另存为</Button>-->
                     <Button type="primary" style="margin-left: 140px;" @click="save">保存</Button>
                     <Button type="primary" style="margin-left: 20px;" @click="issue">发布</Button>
                 </div>

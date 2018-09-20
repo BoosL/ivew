@@ -25,6 +25,7 @@
 <template>
     <div id="app" v-if="remove">
         <div class="model">
+            {{num}}
             <Input v-model="UploadVideo" size="large" style="position: absolute;top: 5px;display: none"/>
             <span style="position: absolute;left: 50%;transform: translate(-50%,0);top: 50px;font-size: 30px;font-weight: 600;color: #ff0000;"
                   v-if="videoOK">视频上传成功</span>
@@ -45,10 +46,10 @@
                     <Button type="primary" ghost @click="removes">移除</Button>
                 </li>
                 <li>
-                    <Button type="primary" ghost>上移</Button>
+                    <Button type="primary" ghost @click="moveup" v-show="this.coms[num].num>0">上移</Button>
                 </li>
                 <li>
-                    <Button type="primary" ghost>下移</Button>
+                    <Button type="primary" ghost @click="movedown" v-show="this.coms[num].num<this.coms.length-1">下移</Button>
                 </li>
             </ul>
         </div>
@@ -57,11 +58,12 @@
 
 <script>
     import axios from 'axios';
-
+    import Vue from 'vue';
     export default {
         name: 'UploadVideo',
         props: {
             coms: [Array],
+            num: [Number],
             itemIds: [String],
             callback: [Function]
         },
@@ -76,7 +78,7 @@
         created() {
             // console.log(this.coms);
             // console.log(this.itemIds);
-            this.callback(this.UploadVideo);
+            this.callback(this.UploadVideo, this.coms, this.clear);
         },
         methods: {
             UploadVideos(response) {
@@ -88,7 +90,33 @@
                 this.videoerror = true;
             },
             removes() {
-                this.remove = false;
+                var that = this;
+                that.coms.splice(that.num,1);
+                if(that.coms.length<1){
+                    that.clear = true;
+                }
+                that.callback(this.singlePicture, this.coms, this.clear);
+
+            },
+            moveup() {
+                var that = this;
+                var x = that.num;
+                var temp = that.coms[x-1];
+                Vue.set(that.coms,x-1,that.coms[x]);
+                Vue.set(that.coms,x,temp);
+                for(var i = 0; i<that.coms.length; i++){
+                    that.coms[i].num = i;
+                }
+            },
+            movedown() {
+                var that = this;
+                var x = that.num;
+                var temp = that.coms[x+1];
+                Vue.set(that.coms,x+1,that.coms[x]);
+                Vue.set(that.coms,x,temp);
+                for(var i = 0; i<that.coms.length; i++){
+                    that.coms[i].num = i;
+                }
             },
 
         },

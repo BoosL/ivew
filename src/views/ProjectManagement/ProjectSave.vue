@@ -60,7 +60,8 @@
 <template>
     <div id="app">
         <div class="establish">
-            <span class="title">创建项目</span>
+            <span class="title" v-show="!titleChange">创建项目</span>
+            <span class="title" v-show="titleChange">编辑项目</span>
             <div class="Fill">
                 <Input v-model="name" placeholder="项目名称" style="width: 300px"/>
                 <DatePicker type="datetime" placeholder="项目开始时间" format="yyyy-MM-dd HH:mm:ss" style="width: 300px"
@@ -72,6 +73,7 @@
                 </Select>
                 <Input v-model="explain" type="textarea" :autosize="{minRows: 8,maxRows: 8}" placeholder="项目说明"/>
                 <Button type="primary" @click="save" id="save">保存</Button>
+                <!--<Button type="primary" @click="save" id="save">保存</Button>-->
                 <!--<Button type="primary" @click="makeland" id="makeing">制作落地页</Button>-->
             </div>
         </div>
@@ -91,7 +93,8 @@
                 startTime: '',
                 endTime: '',
                 explain: '',
-                id: ''
+                id: '',
+                titleChange:false
             };
         },
 
@@ -118,76 +121,147 @@
             get() {
                 var that = this;
                 that.id = that.$route.params.id;
-                axios.post(that.GLOBAL.BASE_URL + '/adproject/getInfoById', {
-                    'id': that.id
-                }, {
-                    withCredentials: true
-                })
-                    .then(function (response) {
-                        var model = response.data.result;
-                        that.name = model.pname;
-                        that.explain = model.pnote;
-                        that.couponSelected = model.classid;
-                        that.startTime = new Date(model.begintime);
-                        that.endTime = new Date(model.endtime);
+                console.info("that.$route.params.id"+that.$route.params.id)
+                if(that.id != undefined && that.id !="" && that.id!=null){
+                	 that.titleChange=true;
+                    axios.post(that.GLOBAL.BASE_URL + '/adproject/getInfoById', {
+                        'id': that.id
+                    }, {
+                        withCredentials: true
                     })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
+                        .then(function (response) {
+                            var model = response.data.result;
+                            that.name = model.pname;
+                            that.explain = model.pnote;
+                            that.couponSelected = model.classid;
+                            that.startTime = new Date(model.begintime);
+                            that.endTime = new Date(model.endtime);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+              }else{
+              	    that.titleChange=false;
+                    that.name = "";
+                    that.explain ="";
+                   that.couponSelected = "";
+                   that.startTime = "";
+                    that.endTime = "";
+               }
+                
             },
             save() {
                 var that = this;
-                axios.post(that.GLOBAL.BASE_URL + '/adproject/add', {
-                    'begintime': this.startTime,
-                    'classid': this.couponSelected,
-                    'endtime': this.endTime,
-                    'pname': this.name,
-                    'pnote': this.explain,
-                }, {
-                    withCredentials: true
-                })
-                    .then(function (response) {
-                        console.log(response);
-                        if (response.data.e == 1) {
-                            that.pid = response.data.result.pid;
-                            that.$Notice.open({
-                                title: '添加项目成功',
-                                top: 300,
-                                duration: 2,
-                                onClose: function () {
-                                    that.$router.push({
-                                        name: 'ulitem',
-                                        params: {
-                                            pid: that.pid,
-                                        }
-                                    });
-                                    that.startTime = '';
-                                    that.couponSelected = '';
-                                    that.endTime = '';
-                                    that.name = '';
-                                    that.explain = '';
-                                }
-                            });
-                        } else {
-                            that.$Notice.open({
-                                title: '添加项目失败，请重新填写',
-                                top: 300,
-                                duration: 2,
-                                onClose: function () {
-                                    that.startTime = '';
-                                    that.couponSelected = '';
-                                    that.endTime = '';
-                                    that.name = '';
-                                    that.explain = '';
-                                }
-                            });
-                            return;
-                        }
-
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
+                if(that.id != undefined && that.id !="" && that.id!=null){
+                	axios.post(that.GLOBAL.BASE_URL + '/adproject/update', {
+	                    'begintime': this.startTime,
+	                    'classid': this.couponSelected,
+	                    'endtime': this.endTime,
+	                    'pname': this.name,
+	                    'pnote': this.explain,
+	                    'pid':that.id
+	                }, {
+	                    withCredentials: true
+	                })
+	                    .then(function (response) {
+	                       // console.log(response);
+	                        if (response.data.e == 1) {
+	                        	
+	                        	
+//	                            that.pid = response.data.result.pid;
+	                         
+	                            that.$Notice.open({
+	                                title: '项目编辑成功',
+	                                top: 300,
+	                                duration: 2,
+	                                onClose: function () {
+	                                    that.$router.push({
+	                                        name: 'ulitem',
+	                                        params: {
+	                                            pid: that.id,
+	                                        }
+	                                    });
+	                                    that.startTime = '';
+	                                    that.couponSelected = '';
+	                                    that.endTime = '';
+	                                    that.name = '';
+	                                    that.explain = '';
+	                                }
+	                            });
+	                        } else {
+	                            that.$Notice.open({
+	                                title: '项目编辑失败，请重新填写',
+	                                top: 300,
+	                                duration: 2,
+	                                onClose: function () {
+	                                    that.startTime = '';
+	                                    that.couponSelected = '';
+	                                    that.endTime = '';
+	                                    that.name = '';
+	                                    that.explain = '';
+	                                }
+	                            });
+	                            return;
+	                        }
+	
+	                    })
+	                    .catch(function (error) {
+	                        console.log(error);
+	                    });
+                }else{
+                	axios.post(that.GLOBAL.BASE_URL + '/adproject/add', {
+	                    'begintime': this.startTime,
+	                    'classid': this.couponSelected,
+	                    'endtime': this.endTime,
+	                    'pname': this.name,
+	                    'pnote': this.explain,
+	                }, {
+	                    withCredentials: true
+	                })
+	                    .then(function (response) {
+	                        console.log(response);
+	                        if (response.data.e == 1) {
+	                            that.pid = response.data.result.pid;
+	                            that.$Notice.open({
+	                                title: '项目创建成功',
+	                                top: 300,
+	                                duration: 2,
+	                                onClose: function () {
+	                                    that.$router.push({
+	                                        name: 'ulitem',
+	                                        params: {
+	                                            pid: that.pid,
+	                                        }
+	                                    });
+	                                    that.startTime = '';
+	                                    that.couponSelected = '';
+	                                    that.endTime = '';
+	                                    that.name = '';
+	                                    that.explain = '';
+	                                }
+	                            });
+	                        } else {
+	                            that.$Notice.open({
+	                                title: '项目创建失败，请重新填写',
+	                                top: 300,
+	                                duration: 2,
+	                                onClose: function () {
+	                                    that.startTime = '';
+	                                    that.couponSelected = '';
+	                                    that.endTime = '';
+	                                    that.name = '';
+	                                    that.explain = '';
+	                                }
+	                            });
+	                            return;
+	                        }
+	
+	                    })
+	                    .catch(function (error) {
+	                        console.log(error);
+	                    });
+                }
+                
             },
             makeland() {
                 let self = this;

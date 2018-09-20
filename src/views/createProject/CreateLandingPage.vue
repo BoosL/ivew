@@ -35,6 +35,10 @@
                 right: 10%;
                 top: 200px;
                 width: 300px;
+                .BgColor{
+                    background:rgb(0,143,255);
+                    color:#fff;
+                }
                 h2 {
                     position: absolute;
                     right: 70px;
@@ -196,27 +200,21 @@
             <div class="addbox">
                 <h2>模块功能添加</h2>
                 <ul class="addmodel">
-                    <li @click="image" ref="image">单图片模块</li>
-                    <li @click="video" ref="video">视频模块</li>
-                    <li @click="images" ref="images">轮播图模块</li>
-                    <li @click="text" ref="text">文本框模块</li>
-                    <li @click="chiose" ref="chiose">地区模块</li>
-                    <li @click="SubmitForm" ref="SubmitForm">链接模块</li>
-                    <li @click="button" ref="button">按钮模块</li>
-                    <li @click="requiredFields" ref="requiredFields">必填项模块</li>
-                    <li @click="NotMandatory" ref="NotMandatory">非必填项模块</li>
+                    <li @click="listRender(index)" :class="{ BgColor: changeRed == index}" v-for="(item, index) of btnList" :key="item.index">{{item}}</li>
                 </ul>
                 <Input v-model="ModuleType" size="large" style="display: none"/>
                 <div style="margin-top: 280px;position: relative" v-if="Module">
                     <Input v-model="ModuleName" size="large" placeholder="请填写模块名称"
                            style="width:200px;margin-left: 30px"/>
-                    <Checkbox v-model="single" @on-change="check"
-                              style="position: absolute;top: 10px;left: 80%;width: 60px;">
-                        必填项
-                    </Checkbox>
+                    <!--<Checkbox v-model="single" @on-change="check"-->
+                              <!--style="position: absolute;top: 10px;left: 80%;width: 60px;">-->
+                        <!--必填项-->
+                    <!--</Checkbox>-->
+
                     <Button type="success" @click="ModuleData"
                             style="position: absolute;top: 60px;left: 50%;transform: translate(-50%,0)">提交
                     </Button>
+                    <input type="checkbox" name="true">
                 </div>
                 <div>
                 </div>
@@ -234,6 +232,7 @@
                             <li style="height: 700px"></li>
                         </ul>
                         <component :is="com.component" v-for="com in coms" :key='coms.coms' :coms="coms"
+                                   :num="com.num"
                                    :itemId="itemId" :itemIds="itemIds" :itemIdt="itemIdt" :itemIdth="itemIdth"
                                    :itemIdf="itemIdf" :itemIdfi="itemIdfi" :itemIdSIX="itemIdSIX" :itemIdSev="itemIdSev"
                                    :itemIdEig="itemIdEig" :ModuleName="ModuleName" :id="id" :callback="callback">
@@ -263,12 +262,13 @@
     import SubmitF from '../module/SubmitForm';
     import requiredF from '../module/requiredFields';
     import NotM from '../module/NotMandatory';
+    import Radio from '../module/Radio';
+    import checkBox from '../module/checkBox';
 
     export default {
         name: 'CreateLandingPage',
         data() {
             return {
-                single: false,
                 luodiyename: '',
                 coms: [],
                 clear: true,
@@ -288,17 +288,39 @@
                 Idlist: [],
                 pnames: '',
                 id: '',
+                num: -1,
+                btnList: [
+                    '单图片模块'
+                    ,'视频模块',
+                    '轮播图模块',
+                    '文本框模块',
+                    '地区模块',
+                    '链接模块',
+                    '按钮模块',
+                    '必填项模块',
+                    '非必填项模块',
+                    '单选模块'
+                ],
+                list: [
+                    '图片',
+                    '视频',
+                    '轮播图',
+                    '文本',
+                    '表单地区',
+                    '链接',
+                    '按钮',
+                    '必填项',
+                    '非必填项',
+                    '单选'
+                ],
+                listIndex: 0,
+                changeRed: -1
             };
         },
         mounted() {
         },
         created() {
-            var that = this;
-            if (that.single == true) {
-                that.single == '是';
-            } else {
-                that.single == '否';
-            }
+
         },
         beforeRouteEnter(to, from, next) {
             next(vm => {
@@ -308,8 +330,6 @@
         beforeRouteLeave(to, from, next) {
             next();
         },
-
-
         methods: {
             get() {
                 var that = this;
@@ -318,336 +338,53 @@
                 that.id = that.$route.params.id;
                 that.pnames = that.$route.params.pnames;
             },
-            check() {
-            },
-            image() {
+            listRender(index) {
                 var that = this;
-                that.ModuleType = '图片';
+                that.listIndex = index;
+                that.ModuleType = that.list[index];
+                that.changeRed = that.listIndex;
                 that.Module = true;
                 that.ModuleName = '';
-                that.single = false;
-                that.$refs.image.style.background = '#2d8cf0';
-                that.$refs.image.style.color = '#fff';
-
-                that.$refs.video.style.background = '#fff';
-                that.$refs.video.style.color = '#000';
-
-                that.$refs.images.style.background = '#fff';
-                that.$refs.images.style.color = '#000';
-
-                that.$refs.text.style.background = '#fff';
-                that.$refs.text.style.color = '#000';
-
-                that.$refs.chiose.style.background = '#fff';
-                that.$refs.chiose.style.color = '#000';
-
-                that.$refs.SubmitForm.style.background = '#fff';
-                that.$refs.SubmitForm.style.color = '#000';
-
-                that.$refs.button.style.background = '#fff';
-                that.$refs.button.style.color = '#000';
-
-                that.$refs.requiredFields.style.background = '#fff';
-                that.$refs.requiredFields.style.color = '#000';
-
-                that.$refs.NotMandatory.style.background = '#fff';
-                that.$refs.NotMandatory.style.color = '#000';
             },
-            video() {
-                var that = this;
-                that.ModuleType = '视频';
-                that.Module = true;
-                that.ModuleName = '';
-                that.single = false;
-                that.$refs.image.style.background = '#fff';
-                that.$refs.image.style.color = '#000';
-
-                that.$refs.video.style.background = '#2d8cf0';
-                that.$refs.video.style.color = '#fff';
-
-                that.$refs.images.style.background = '#fff';
-                that.$refs.images.style.color = '#000';
-
-                that.$refs.text.style.background = '#fff';
-                that.$refs.text.style.color = '#000';
-
-                that.$refs.chiose.style.background = '#fff';
-                that.$refs.chiose.style.color = '#000';
-
-                that.$refs.SubmitForm.style.background = '#fff';
-                that.$refs.SubmitForm.style.color = '#000';
-
-                that.$refs.button.style.background = '#fff';
-                that.$refs.button.style.color = '#000';
-
-                that.$refs.requiredFields.style.background = '#fff';
-                that.$refs.requiredFields.style.color = '#000';
-
-                that.$refs.NotMandatory.style.background = '#fff';
-                that.$refs.NotMandatory.style.color = '#000';
-            },
-            images() {
-                var that = this;
-                that.ModuleType = '轮播图';
-                that.Module = true;
-                that.ModuleName = '';
-                that.single = false;
-                that.$refs.image.style.background = '#fff';
-                that.$refs.image.style.color = '#000';
-
-                that.$refs.video.style.background = '#fff';
-                that.$refs.video.style.color = '#000';
-
-                that.$refs.images.style.background = '#2d8cf0';
-                that.$refs.images.style.color = '#fff';
-
-                that.$refs.text.style.background = '#fff';
-                that.$refs.text.style.color = '#000';
-
-                that.$refs.chiose.style.background = '#fff';
-                that.$refs.chiose.style.color = '#000';
-
-                that.$refs.SubmitForm.style.background = '#fff';
-                that.$refs.SubmitForm.style.color = '#000';
-
-                that.$refs.button.style.background = '#fff';
-                that.$refs.button.style.color = '#000';
-
-                that.$refs.requiredFields.style.background = '#fff';
-                that.$refs.requiredFields.style.color = '#000';
-
-                that.$refs.NotMandatory.style.background = '#fff';
-                that.$refs.NotMandatory.style.color = '#000';
-            },
-            text() {
-                var that = this;
-                that.ModuleType = '文本';
-                that.Module = true;
-                that.ModuleName = '';
-                that.single = false;
-                that.$refs.image.style.background = '#fff';
-                that.$refs.image.style.color = '#000';
-
-                that.$refs.video.style.background = '#fff';
-                that.$refs.video.style.color = '#000';
-
-                that.$refs.images.style.background = '#fff';
-                that.$refs.images.style.color = '#000';
-
-                that.$refs.text.style.background = '#2d8cf0';
-                that.$refs.text.style.color = '#fff';
-
-                that.$refs.chiose.style.background = '#fff';
-                that.$refs.chiose.style.color = '#000';
-
-                that.$refs.SubmitForm.style.background = '#fff';
-                that.$refs.SubmitForm.style.color = '#000';
-
-                that.$refs.button.style.background = '#fff';
-                that.$refs.button.style.color = '#000';
-
-                that.$refs.requiredFields.style.background = '#fff';
-                that.$refs.requiredFields.style.color = '#000';
-
-                that.$refs.NotMandatory.style.background = '#fff';
-                that.$refs.NotMandatory.style.color = '#000';
-            },
-            chiose() {
-                var that = this;
-                that.ModuleType = '表单地区';
-                that.Module = true;
-                that.ModuleName = '';
-                that.single = false;
-                that.$refs.image.style.background = '#fff';
-                that.$refs.image.style.color = '#000';
-
-                that.$refs.video.style.background = '#fff';
-                that.$refs.video.style.color = '#000';
-
-                that.$refs.images.style.background = '#fff';
-                that.$refs.images.style.color = '#000';
-
-                that.$refs.text.style.background = '#fff';
-                that.$refs.text.style.color = '#000';
-
-                that.$refs.chiose.style.background = '#2d8cf0';
-                that.$refs.chiose.style.color = '#fff';
-
-                that.$refs.SubmitForm.style.background = '#fff';
-                that.$refs.SubmitForm.style.color = '#000';
-
-                that.$refs.button.style.background = '#fff';
-                that.$refs.button.style.color = '#000';
-
-                that.$refs.requiredFields.style.background = '#fff';
-                that.$refs.requiredFields.style.color = '#000';
-
-                that.$refs.NotMandatory.style.background = '#fff';
-                that.$refs.NotMandatory.style.color = '#000';
-            },
-            SubmitForm() {
-                var that = this;
-                that.ModuleType = '链接';
-                that.Module = true;
-                that.ModuleName = '';
-                that.single = false;
-                that.$refs.image.style.background = '#fff';
-                that.$refs.image.style.color = '#000';
-
-                that.$refs.video.style.background = '#fff';
-                that.$refs.video.style.color = '#000';
-
-                that.$refs.images.style.background = '#fff';
-                that.$refs.images.style.color = '#000';
-
-                that.$refs.text.style.background = '#fff';
-                that.$refs.text.style.color = '#000';
-
-                that.$refs.chiose.style.background = '#fff';
-                that.$refs.chiose.style.color = '#000';
-
-                that.$refs.SubmitForm.style.background = '#2d8cf0';
-                that.$refs.SubmitForm.style.color = '#fff';
-
-                that.$refs.button.style.background = '#fff';
-                that.$refs.button.style.color = '#000';
-
-                that.$refs.requiredFields.style.background = '#fff';
-                that.$refs.requiredFields.style.color = '#000';
-
-                that.$refs.NotMandatory.style.background = '#fff';
-                that.$refs.NotMandatory.style.color = '#000';
-            },
-            button() {
-                var that = this;
-                that.ModuleType = '按钮';
-                that.Module = true;
-                that.ModuleName = '';
-                that.single = false;
-                that.$refs.image.style.background = '#fff';
-                that.$refs.image.style.color = '#000';
-
-                that.$refs.video.style.background = '#fff';
-                that.$refs.video.style.color = '#000';
-
-                that.$refs.images.style.background = '#fff';
-                that.$refs.images.style.color = '#000';
-
-                that.$refs.text.style.background = '#fff';
-                that.$refs.text.style.color = '#000';
-
-                that.$refs.chiose.style.background = '#fff';
-                that.$refs.chiose.style.color = '#000';
-
-                that.$refs.SubmitForm.style.background = '#fff';
-                that.$refs.SubmitForm.style.color = '#000';
-
-                that.$refs.button.style.background = '#2d8cf0';
-                that.$refs.button.style.color = '#fff';
-
-                that.$refs.requiredFields.style.background = '#fff';
-                that.$refs.requiredFields.style.color = '#000';
-
-                that.$refs.NotMandatory.style.background = '#fff';
-                that.$refs.NotMandatory.style.color = '#000';
-            },
-            requiredFields() {
-                var that = this;
-                that.ModuleType = '必填项';
-                that.Module = true;
-                that.ModuleName = '';
-                that.single = false;
-                that.$refs.image.style.background = '#fff';
-                that.$refs.image.style.color = '#000';
-
-                that.$refs.video.style.background = '#fff';
-                that.$refs.video.style.color = '#000';
-
-                that.$refs.images.style.background = '#fff';
-                that.$refs.images.style.color = '#000';
-
-                that.$refs.text.style.background = '#fff';
-                that.$refs.text.style.color = '#000';
-
-                that.$refs.chiose.style.background = '#fff';
-                that.$refs.chiose.style.color = '#000';
-
-                that.$refs.SubmitForm.style.background = '#fff';
-                that.$refs.SubmitForm.style.color = '#000';
-
-                that.$refs.button.style.background = '#fff';
-                that.$refs.button.style.color = '#000';
-
-                that.$refs.requiredFields.style.background = '#2d8cf0';
-                that.$refs.requiredFields.style.color = '#fff';
-
-                that.$refs.NotMandatory.style.background = '#fff';
-                that.$refs.NotMandatory.style.color = '#000';
-            },
-
-            NotMandatory() {
-                var that = this;
-                that.ModuleType = '非必填项';
-                that.Module = true;
-                that.ModuleName = '';
-                that.single = false;
-                that.$refs.image.style.background = '#fff';
-                that.$refs.image.style.color = '#000';
-
-                that.$refs.video.style.background = '#fff';
-                that.$refs.video.style.color = '#000';
-
-                that.$refs.images.style.background = '#fff';
-                that.$refs.images.style.color = '#000';
-
-                that.$refs.text.style.background = '#fff';
-                that.$refs.text.style.color = '#000';
-
-                that.$refs.chiose.style.background = '#fff';
-                that.$refs.chiose.style.color = '#000';
-
-                that.$refs.SubmitForm.style.background = '#fff';
-                that.$refs.SubmitForm.style.color = '#000';
-
-                that.$refs.button.style.background = '#fff';
-                that.$refs.button.style.color = '#000';
-
-                that.$refs.requiredFields.style.background = '#fff';
-                that.$refs.requiredFields.style.color = '#000';
-
-                that.$refs.NotMandatory.style.background = '#2d8cf0';
-                that.$refs.NotMandatory.style.color = '#fff';
-            },
-
-
             ModuleData() {
                 var that = this;
-                if (that.single == true) {
-                    if (that.single == true) {
-                        that.single = '是';
-                    } else {
-                        that.single = '否';
-                    }
                     if (that.ModuleType == '图片') {
+                        console.log(1);
                         axios({
                             method: 'post',
                             url: that.GLOBAL.BASE_URL + '/ldyitems/add',
                             data: {
                                 'itemclass': that.ModuleType,
                                 'ltitle': that.ModuleName,
-                                'ismust': that.single,
+//                                'ismust': that.single,
                             },
                             withCredentials: true
                         })
                             .then(function (response) {
+                                console.log(1);
                                 if (response.data.e == 1) {
+                                    console.log(2);
+                                    if(that.coms.length==0){
+                                        that.num=-1;
+                                        that.num++;
+                                    }else{
+                                        that.num=that.coms.length-1;
+                                        that.num++;
+                                    }
                                     that.itemId = response.data.result.itemId;
                                     that.coms.push({
                                         component: 'singlePicture',
+                                        num: that.num
                                     });
                                     that.clear = false;
-                                    that.callback = function (name) {
+                                    that.callback = function (name,x ,y) {
                                         that.Idlist.push(name);
+                                        var result = x;
+                                        for(var i=0;i < result.length;i++){
+                                            result[i].num = i;
+                                        }
+                                        that.coms=result;
+                                        that.clear = y;
                                     };
                                 }
                             })
@@ -668,14 +405,31 @@
                         })
                             .then(function (response) {
                                 if (response.data.e == 1) {
+                                    if(that.coms.length==0){
+                                        that.num=-1;
+                                        that.num++;
+                                    }else{
+                                        that.num=that.coms.length-1;
+                                        that.num++;
+                                    }
                                     that.itemIds = response.data.result.itemId;
+
                                     that.coms.push({
                                         component: 'UploadVideo',
+                                        num: that.num
                                     });
+
                                     that.clear = false;
-                                    that.callback = function (name) {
+                                    that.callback = function (name,x ,y) {
                                         that.Idlist.push(name);
+                                        var result = x;
+                                        for(var i=0;i < result.length;i++){
+                                            result[i].num = i;
+                                        }
+                                        that.coms = result;
+                                        that.clear = y;
                                     };
+
                                 }
                             })
                             .catch(function (error) {
@@ -698,10 +452,17 @@
                                 if (response.data.e == 1) {
                                     that.coms.push({
                                         component: 'Pictures',
+                                        num: that.num
                                     });
                                     that.clear = false;
-                                    that.callback = function (name) {
+                                    that.callback = function (name,x ,y) {
                                         that.Idlist.push(name);
+                                        var result = x;
+                                        for(var i=0;i < result.length;i++){
+                                            result[i].num = i;
+                                        }
+                                        that.coms=result;
+                                        that.clear = y;
                                     };
                                 }
                             })
@@ -723,12 +484,26 @@
                             .then(function (response) {
                                 that.itemIdth = response.data.result.itemId;
                                 if (response.data.e == 1) {
+                                    if(that.coms.length==0){
+                                        that.num=-1;
+                                        that.num++;
+                                    }else{
+                                        that.num=that.coms.length-1;
+                                        that.num++;
+                                    }
                                     that.coms.push({
                                         component: 'UploadText',
+                                        num: that.num
                                     });
                                     that.clear = false;
-                                    that.callback = function (name) {
+                                    that.callback = function (name,x ,y) {
                                         that.Idlist.push(name);
+                                        var result = x;
+                                        for(var i=0;i < result.length;i++){
+                                            result[i].num = i;
+                                        }
+                                        that.coms=result;
+                                        that.clear = y;
                                     };
                                 }
                             })
@@ -750,12 +525,26 @@
                             .then(function (response) {
                                 that.itemIdf = response.data.result.itemId;
                                 if (response.data.e == 1) {
+                                    if(that.coms.length==0){
+                                        that.num=-1;
+                                        that.num++;
+                                    }else{
+                                        that.num=that.coms.length-1;
+                                        that.num++;
+                                    }
                                     that.coms.push({
                                         component: 'Chiose',
+                                        num: that.num
                                     });
                                     that.clear = false;
-                                    that.callback = function (name) {
+                                    that.callback = function (name,x ,y) {
                                         that.Idlist.push(name);
+                                        var result = x;
+                                        for(var i=0;i < result.length;i++){
+                                            result[i].num = i;
+                                        }
+                                        that.coms=result;
+                                        that.clear = y;
                                     };
                                 }
                             })
@@ -778,12 +567,26 @@
                                 console.log(response);
                                 that.itemIdSIX = response.data.result.itemId;
                                 if (response.data.e == 1) {
+                                    if(that.coms.length==0){
+                                        that.num=-1;
+                                        that.num++;
+                                    }else{
+                                        that.num=that.coms.length-1;
+                                        that.num++;
+                                    }
                                     that.coms.push({
                                         component: 'SubmitF',
+                                        num: that.num
                                     });
                                     that.clear = false;
-                                    that.callback = function (name) {
+                                    that.callback = function (name,x ,y) {
                                         that.Idlist.push(name);
+                                        var result = x;
+                                        for(var i=0;i < result.length;i++){
+                                            result[i].num = i;
+                                        }
+                                        that.coms=result;
+                                        that.clear = y;
                                     };
                                 }
                             })
@@ -806,12 +609,26 @@
                                 console.log(response);
                                 that.itemIdfi = response.data.result.itemId;
                                 if (response.data.e == 1) {
+                                    if(that.coms.length==0){
+                                        that.num=-1;
+                                        that.num++;
+                                    }else{
+                                        that.num=that.coms.length-1;
+                                        that.num++;
+                                    }
                                     that.coms.push({
                                         component: 'btns',
+                                        num: that.num
                                     });
                                     that.clear = false;
-                                    that.callback = function (name) {
+                                    that.callback = function (name,x ,y) {
                                         that.Idlist.push(name);
+                                        var result = x;
+                                        for(var i=0;i < result.length;i++){
+                                            result[i].num = i;
+                                        }
+                                        that.coms=result;
+                                        that.clear = y;
                                     };
                                 }
                             })
@@ -834,12 +651,26 @@
                             .then(function (response) {
                                 that.itemIdSev = response.data.result.itemId;
                                 if (response.data.e == 1) {
+                                    if(that.coms.length==0){
+                                        that.num=-1;
+                                        that.num++;
+                                    }else{
+                                        that.num=that.coms.length-1;
+                                        that.num++;
+                                    }
                                     that.coms.push({
                                         component: 'requiredF',
+                                        num: that.num
                                     });
                                     that.clear = false;
-                                    that.callback = function (name) {
+                                    that.callback = function (name,x ,y) {
                                         that.Idlist.push(name);
+                                        var result = x;
+                                        for(var i=0;i < result.length;i++){
+                                            result[i].num = i;
+                                        }
+                                        that.coms=result;
+                                        that.clear = y;
                                     };
                                 }
                             })
@@ -862,12 +693,26 @@
                             .then(function (response) {
                                 that.itemIdEig = response.data.result.itemId;
                                 if (response.data.e == 1) {
+                                    if(that.coms.length==0){
+                                        that.num=-1;
+                                        that.num++;
+                                    }else{
+                                        that.num=that.coms.length-1;
+                                        that.num++;
+                                    }
                                     that.coms.push({
                                         component: 'NotM',
+                                        num: that.num
                                     });
                                     that.clear = false;
-                                    that.callback = function (name) {
+                                    that.callback = function (name,x ,y) {
                                         that.Idlist.push(name);
+                                        var result = x;
+                                        for(var i=0;i < result.length;i++){
+                                            result[i].num = i;
+                                        }
+                                        that.coms=result;
+                                        that.clear = y;
                                     };
                                 }
                             })
@@ -875,11 +720,6 @@
                                 console.log(error);
                             });
                     }
-                } else {
-                    this.$Notice.open({
-                        title: '必填项未选中',
-                    });
-                }
             },
             //保存
             preserve() {
@@ -917,7 +757,7 @@
                     .catch(function (error) {
                         console.log(error);
                     });
-            },
+            }
         },
         components: {
             Chiose,
@@ -929,7 +769,10 @@
             SubmitF,
             requiredF,
             NotM,
-        }
+            Radio,
+            checkBox
+        },
+
     };
 </script>
 

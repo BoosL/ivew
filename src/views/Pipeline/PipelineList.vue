@@ -4,8 +4,8 @@
         min-width: 800px;
         overflow: hidden;
         h1 {
-            margin-left: 60px;
-            margin-top: 40px;
+            margin-left:3%;
+            margin-top: 4%;
         }
         .addbutton {
             position: absolute;
@@ -47,12 +47,12 @@
             }
         }
         #table {
-            margin-left: 200px;
-            margin-top: 120px;
+            margin-left: 0%;
+            margin-top: 0%;
             width: 1200px;
         }
         .ivu-page {
-            margin-left: 200px;
+            margin-left: 0.2%;
         }
     }
 </style>
@@ -80,7 +80,7 @@
                 </Button>
             </div>
         </div>
-        <div style="margin-left: 100px;padding-top: 100px;">
+        <div style="margin-left: 3%;padding-top: 2%;">
             <i-table highlight-row :columns="columns" :data="data" ref="table" id="table"></i-table>
             <Page :total="pageTotal" :current="pageNum" :page-size="pageSize" show-elevator show-sizer show-total
                   placement="top" @on-change="handlePage" @on-page-size-change='handlePageSize'></Page>

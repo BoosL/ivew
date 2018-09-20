@@ -25,6 +25,7 @@
 <template>
     <div id="app" v-if="remove">
         <div class="model">
+            {{num}}
             <Input v-model="choice" size="large" style="position: absolute;top: 5px;display: none"/>
             <v-distpicker v-model="citys"
                           style="padding-top: 100px;margin-bottom: 40px;margin-left: 30px"></v-distpicker>
@@ -37,10 +38,10 @@
                         <Button type="primary" ghost @click="removes">移除</Button>
                     </li>
                     <li>
-                        <Button type="primary" ghost @click="">上移</Button>
+                        <Button type="primary" ghost @click="moveup" v-show="this.coms[num].num>0">上移</Button>
                     </li>
                     <li>
-                        <Button type="primary" ghost @click="">下移</Button>
+                        <Button type="primary" ghost @click="movedown" v-show="this.coms[num].num<this.coms.length-1">下移</Button>
                     </li>
                 </ul>
             </div>
@@ -51,13 +52,14 @@
 <script>
     import axios from 'axios';
     import VDistpicker from 'v-distpicker';
-
+    import Vue from 'vue';
     export default {
         name: 'choice',
         props: {
             coms: [Array],
             itemIdf: [String],
-            callback: [Function]
+            num: [Number],
+            callback: [Function],
         },
         data() {
             return {
@@ -70,7 +72,7 @@
         created() {
             // console.log(this.coms);
             // console.log(this.itemIdf);
-            this.callback(this.choice);
+            this.callback(this.choice, this.coms, this.clear);
         },
         methods: {
             refer() {
@@ -86,7 +88,32 @@
                     });
             },
             removes() {
-                // this.remove = false;
+                var that = this;
+                that.coms.splice(that.num,1);
+                if(that.coms.length<1){
+                    that.clear = true;
+                }
+                that.callback(this.singlePicture, this.coms, this.clear);
+            },
+            moveup() {
+                var that = this;
+                var x = that.num;
+                var temp = that.coms[x-1];
+                Vue.set(that.coms,x-1,that.coms[x]);
+                Vue.set(that.coms,x,temp);
+                for(var i = 0; i<that.coms.length; i++){
+                    that.coms[i].num = i;
+                }
+            },
+            movedown() {
+                var that = this;
+                var x = that.num;
+                var temp = that.coms[x+1];
+                Vue.set(that.coms,x+1,that.coms[x]);
+                Vue.set(that.coms,x,temp);
+                for(var i = 0; i<that.coms.length; i++){
+                    that.coms[i].num = i;
+                }
             },
         },
         components: {

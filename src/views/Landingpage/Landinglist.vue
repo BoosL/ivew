@@ -2,51 +2,104 @@
     html, body, #app {
         height: 100%;
         h1 {
-            position: relative;
-            left: 60px;
-            top: 20px;
+            /*position: relative;
+            left: 30px;
+            top: 20px;*/
+           margin-left: 30px;
+           display: inline-block;
+           margin-top: 20px;
+            
         }
-
+		.list-table{
+			position: relative;
+			width: 100%;
+		    top: 30px;
+			padding-left: 30px;
+		    padding-right: 30px;
+		   /* width: 1400px;*/
+		    height: auto;
+		    margin-bottom: 100px;
+		}
         .proname {
-            position: absolute;
+            /*position: absolute;
             left: 280px;
-            top: 120px;
+            top: 120px;*/
+            display:inline-block ;
             span {
                 position: relative;
                 top: 8px;
+                width: 82px;
+                display: inline-block;
+                text-align: right;
             }
         }
-
+		.origin { 
+            margin-left: 30px;
+            display: inline-block;
+            position: relative;
+    		top: 4px;
+            span{
+            	position: relative;
+                width: 65px;
+                display: inline-block;
+                text-align: right;
+            }
+        }
         .position {
-            position: absolute;
+            /*position: absolute;
             right: 280px;
-            top: 80px;
-            margin-left: 10px;
+            top: 80px;*/
+            display: inline-block;
             span {
                 position: relative;
                 top: 8px;
+                width: 82px;
+                display: inline-block;
+                text-align: right;
             }
         }
-
+		.sort {
+            /*position: absolute;
+            left: 80px;
+            top: 120px;*/
+           display: inline-block;
+            span {
+                position: relative;
+                top: 8px;
+                width: 65px;
+                display: inline-block;
+                text-align: right;
+            }
+        }
         .link {
-            position: absolute;
+            /*position: absolute;
             left: 320px;
-            top: 78px;
-            margin-left: 10px;
+            top: 78px;*/
+           display: inline-block;
             span {
                 position: relative;
                 top: 8px;
+                width: 65px;
+                display: inline-block;
+                text-align: right;
             }
         }
-
+		.luo-item{
+			margin-top: 20px;
+			line-height: 30px;
+		}
         .channel {
-            position: absolute;
+            /*position: absolute;
             right: 280px;
-            top: 140px;
-            margin-left: 10px;
+            top: 140px;*/
+           display: inline-block;
+            margin-left: 30px;
             span {
                 position: relative;
                 top: 8px;
+                 width: 65px;
+                display: inline-block;
+                text-align: right;
             }
         }
 
@@ -55,27 +108,17 @@
             height: 20px;
         }
 
-        .sort {
-            position: absolute;
-            left: 80px;
-            top: 120px;
-            span {
-                position: relative;
-                top: 8px;
-            }
-        }
+        
 
-        .origin {
-            margin-top: 40px;
-            margin-left: 80px;
-        }
+        
 
         #screen {
             position: absolute;
             right: 40px;
-            top: 80px;
-            width: 100px;
-            height: 40px;
+            top: 140px;
+            width: 80px;
+		    height: 30px;
+		    margin-left: 10px;
         }
 
         #Dcostcalculation {
@@ -85,14 +128,13 @@
             width: 100px;
             height: 40px;
         }
-
-        #Tabs {
+        /*#Tabs {
             position: relative;
             top: 120px;
             left: 120px;
             width: 1400px;
             height: auto;
-        }
+        }*/
 
         .Costing {
             position: fixed;
@@ -214,7 +256,7 @@
                 left: 50%;
                 margin-left: -50px;
             }
-
+			
         }
 
     }
@@ -222,56 +264,65 @@
 <template>
     <div id="app">
         <h1>落地页管理列表</h1>
-        <div class="origin">
+        <div class="luo-item">
+        	<div class="origin">
             <span>按创建时间</span>
-            <DatePicker type="date" style="width: 160px" v-model="starttime"></DatePicker>
+            <DatePicker type="date" style="width: 152px" v-model="starttime"></DatePicker>
+	        </div>
+	        <div class="proname">
+	            <span>按项目类别</span>
+	            <i-select v-model="project" style="width:152px" id="sell">
+	                <i-option v-for="item in ItemClass" :value="item.classid" :key="item.value">{{item.classname}}
+	                </i-option>
+	            </i-select>
+	        </div>
+	        <div class="link">
+	            <span>按状态</span>
+	            <i-select v-model="state" style="width:152px" id="access">
+	                <i-option v-for="item in stateList" :value="item.type" :key="item.value">{{item.type}}</i-option>
+	            </i-select>
+	        </div>
         </div>
-        <div class="proname">
-            <span>按项目类别</span>
-            <i-select v-model="project" style="width:200px" id="sell">
-                <i-option v-for="item in ItemClass" :value="item.classid" :key="item.value">{{item.classname}}
-                </i-option>
-            </i-select>
-        </div>
-        <div class="link">
-            <span>按状态</span>
-            <i-select v-model="state" style="width:200px" id="access">
-                <i-option v-for="item in stateList" :value="item.type" :key="item.value">{{item.type}}</i-option>
-            </i-select>
-        </div>
-        <div class="channel">
+        <div class="luo-item">
+        	 <div class="channel">
             <span>按创建人</span>
-            <i-select v-model="creators" style="width:200px" id="throw">
+            <i-select v-model="creators" style="width:152px" id="throw">
                 <i-option v-for="item in creator" :value="item.userid" :key="item.value">{{item.username}}</i-option>
             </i-select>
+	        </div>
+	        <div class="position">
+	            <span>按投放渠道</span>
+	            <i-select v-model="channels" style="width:152px" id="junp">
+	                <i-option v-for="item in channel" :value="item.channelid" :key="item.value">{{item.channelname}}
+	                </i-option>
+	            </i-select>
+	        </div>
+	        <div class="sort">
+	            <span>按关键字</span>
+	            <i-input :value.sync="keyword" placeholder="可筛选所有条件" id="name" style="width:152px"></i-input>
+	        </div>
         </div>
-        <div class="position">
-            <span>按投放渠道</span>
-            <i-select v-model="channels" style="width:200px" id="junp">
-                <i-option v-for="item in channel" :value="item.channelid" :key="item.value">{{item.channelname}}
-                </i-option>
-            </i-select>
-        </div>
-        <div class="sort">
-            <span>按关键字</span>
-            <i-input :value.sync="keyword" placeholder="可筛选所有条件" id="name"></i-input>
-        </div>
-
-        <Button type="success" size="large" id="screen" @click="screen">
+       
+        <Button type="info" size="large" id="screen"  @click="screen">
             筛选
         </Button>
-        <Tabs :animated="true" id="Tabs" border>
-            <TabPane label="全部">
-                <Table border ref="table" :columns="columns" :data="data"></Table>
-                <Button @click="handleSelectAll(true)">全选</Button>
-                <Button @click="handleSelectAll(false)">取消全选</Button>
-                <Button type="primary" size="large" @click="exportData(1)">
-                    数据下载
-                </Button>
-                <Page :total="pageTotal" :current="pageNum" :page-size="pageSize" show-elevator show-sizer show-total
-                      placement="top" @on-change="handlePage" @on-page-size-change='handlePageSize'></Page>
-            </TabPane>
-        </Tabs>
+        <div class="list-table">
+        	<i-table highlight-row :columns="columns" :data="data" ref="table" id="table"></i-table>
+	        <!--<Tabs :animated="true" id="Tabs" border>
+	            <TabPane label="全部">
+	                <Table border ref="table" :columns="columns" :data="data"></Table>
+	                <!--<Button @click="handleSelectAll(true)">全选</Button>
+	                <Button @click="handleSelectAll(false)">取消全选</Button>
+	                <Button type="primary" size="large" @click="exportData(1)">
+	                    数据下载
+	                </Button>
+	                
+	            </TabPane>
+	        </Tabs>-->
+	        <br/>
+            <Page :total="pageTotal" :current="pageNum" :page-size="pageSize" show-elevator show-sizer show-total
+	                      placement="top" @on-change="handlePage" @on-page-size-change='handlePageSize'></Page>
+        </div>
     </div>
 </template>
 
@@ -310,16 +361,16 @@
 
                 langlist: '',
                 columns: [
-                    {
-                        type: 'selection',
-                        width: 60,
-                        align: 'center',
-                    },
-                    {
-                        title: '序号',
-                        key: 'luodiyeid',
-
-                    },
+//                  {
+//                      type: 'selection',
+//                      width: 60,
+//                      align: 'center',
+//                  },
+//                  {
+//                      title: '序号',
+//                      key: 'luodiyeid',
+//
+//                  },
                     {
                         title: '落地页名称',
                         key: 'lname'
@@ -336,10 +387,10 @@
                         title: '状态',
                         key: 'lstatus'
                     },
-                    {
-                        title: '落地页链接',
-                        key: 'link'
-                    },
+//                  {
+//                      title: '落地页链接',
+//                      key: 'link'
+//                  },
                     {
                         title: '投放渠道',
                         key: 'channelname'
@@ -374,27 +425,33 @@
                                         type: 'ghost',
                                         size: 'small'
                                     },
-                                    on: {
-                                        click: () => {
-
-                                        }
-                                    }
-                                }, '编辑'),
-                                h('Button', {
-                                    props: {
-                                        type: 'dashed',
-                                        size: 'small'
+                                    style: {
+                                        marginRight: '5px'
                                     },
                                     on: {
                                         click: () => {
 
                                         }
                                     }
-                                }, '另存为'),
+                                }, '编辑'),
+//                              h('Button', {
+//                                  props: {
+//                                      type: 'dashed',
+//                                      size: 'small'
+//                                  },
+//                                  on: {
+//                                      click: () => {
+//
+//                                      }
+//                                  }
+//                              }, '另存为'),
                                 h('Button', {
                                     props: {
-                                        type: 'text',
+                                        type: 'ghost',
                                         size: 'small'
+                                    },
+                                    style: {
+                                        marginRight: '5px'
                                     },
                                     on: {
                                         click: () => {
@@ -402,17 +459,17 @@
                                         }
                                     }
                                 }, '锁定 '),
-                                h('Button', {
-                                    props: {
-                                        type: 'error',
-                                        size: 'small'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.remove(params.index);
-                                        }
-                                    }
-                                }, '删除 '),
+//                              h('Button', {
+//                                  props: {
+//                                      type: 'error',
+//                                      size: 'small'
+//                                  },
+//                                  on: {
+//                                      click: () => {
+//                                          this.remove(params.index);
+//                                      }
+//                                  }
+//                              }, '删除 '),
                             ]);
                         }
                     }
@@ -463,7 +520,7 @@
                     var langlist = response.data.result;
                     //绑定的iview table数据，是一个数组
                     that.data = langlist;
-                    that.pageTotal = that.data.length;
+                    that.pageTotal = response.data.total;
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -523,7 +580,24 @@
                         filename: 'data'
                     });
                 }
-            }
+            },
+            getlist() {
+                var that = this;
+                axios.post(that.GLOBAL.BASE_URL + '/luodiye/luodiyeList', {
+                    page: this.pageNum,
+                    rows: this.pageSize
+                })
+                    .then(function (res) {
+                        var list = res.data.result;
+                        //绑定的iview table数据，是一个数组
+                        that.data = list;
+                        that.pageTotal = res.data.total;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            
         },
     };
 </script>

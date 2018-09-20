@@ -7,9 +7,13 @@
             height: 100%;
             .contenttext {
                 width: 100%;
+                min-width:956px;
                 height: auto;
             }
         }
+    }
+    .layout-content{
+    	width:100%;
     }
 </style>
 <template>
@@ -39,7 +43,7 @@
                             </template>
                             <MenuItem name="ulitem">项目列表</MenuItem>
                             <!--<MenuItem name="detail">项目详情页</MenuItem>-->
-                            <MenuItem name="Advertising-data">广告投放数据汇总</MenuItem>
+                            <!--<MenuItem name="Advertising-data">广告投放数据汇总</MenuItem>-->
                             <!--<MenuItem name="Testproject">项目监测数据详情页</MenuItem>-->
                         </Submenu>
                         <Submenu name="3-1">
@@ -96,13 +100,25 @@
         watch: {
             $route: {
                 handler: function (val, oldVal) {
-                    this.$refs.leftMenu.currentActiveName = val.name;
+                    console.log(val.name)
+                    if(val.name=="detail"){
+                    	this.$refs.leftMenu.currentActiveName = "ulitem";
+                    }else{
+                    	 this.$refs.leftMenu.currentActiveName = val.name;
+                    }
+                   
                 },
                 deep: true
             }
         },
         created() {
-            this.$router.push({name: 'home'});
+        },
+        mounted(){
+        	if(this.$route.name=="detail"){
+            	this.$refs.leftMenu.currentActiveName = "ulitem";
+            }else{
+            	 this.$refs.leftMenu.currentActiveName = this.$route.name;
+            }
         },
         methods: {
             menuSelect(name) {
